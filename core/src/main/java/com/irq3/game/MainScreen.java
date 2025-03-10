@@ -1,7 +1,9 @@
 package com.irq3.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.irq3.game.Gnrt.Generator;
@@ -12,15 +14,17 @@ public class MainScreen implements Screen {
     Player player;
     Generator generator;
     MoveCamera Mcamera;
+    BitmapFont font;
     @Override
     public void show() {
         batch = new SpriteBatch();
+        font = new BitmapFont();
         camera = new OrthographicCamera(640,480);
         camera.zoom = 0.8f;
         player = new Player();
         generator= new Generator(batch);
         Mcamera= new MoveCamera(camera);
-        generator.Generate();
+        generator.Generate(camera);
     }
 
     @Override
@@ -30,8 +34,11 @@ public class MainScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        generator.Paint();
+        generator.UpdateGeneration(camera);
+        generator.Paint(camera);
         player.Paint(batch);
+        font.draw(batch,"FPS: "+Gdx.graphics.getFramesPerSecond(), camera.position.x+180,camera.position.y+100);
+        font.draw(batch,"Loaded: "+generator.blocks.size(), camera.position.x+180,camera.position.y+60);
         batch.end();
     }
 

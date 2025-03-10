@@ -1,9 +1,12 @@
 package com.irq3.game.Gnrt;
 
+import java.util.Objects;
+
 public class Block {
-    int x,y;
-    int width,height;
-    int blockType;
+    private int x,y;
+    private int width,height;
+    private int blockType;
+
 
     public Block(int x, int y, int width, int height, int blockType) {
         this.x = x;
@@ -51,5 +54,18 @@ public class Block {
 
     public void setBlockType(int blockType) {
         this.blockType = blockType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Block block = (Block) o;
+        return x == block.x && y == block.y && width == block.width && height == block.height && blockType == block.blockType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, width, height, blockType);
     }
 }

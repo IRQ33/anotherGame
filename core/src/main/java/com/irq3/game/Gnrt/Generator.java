@@ -1,45 +1,79 @@
 package com.irq3.game.Gnrt;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Generator {
     SpriteBatch  batch;
     Texture[] textures = new Texture[5];
-    int xStart=-100,yStart=-100;
     int width=32, height =32;
-    int xSize = 3200, ySize = 3200;
-   List<Block> blocks =new ArrayList<>();
+    int fov=320;
+    int lastPosX=0;
+    int lastPosY=0;
+   public Set<Block> blocks =new HashSet<>();
    PerlinNoise noise;
-    float scale = 0.05f;
+    float scale = 0.075f;
     public Generator(SpriteBatch batch) {
         this.batch = batch;
         Init();
 
     }
 
-    public void Generate()
+    public void Generate(Camera camera)
     {
-        for (int i =xStart; i<=xSize; i+=width) {
-            for (int j = yStart; j <= ySize; j += height) {
+        int posx =(int) camera.position.x;
+        int posy = (int) camera.position.y;
 
-                double generated = noise.noise(i*scale, j*scale);
-
+        for (int i = posx-fov; i <=posx+fov ; i+=32) {
+            for (int j = posy-fov; j <=posy+fov ; j+=32) {
+                double generated = noise.noise(i*scale, j*scale)*2;
                 blocks.add(new Block(i,j, width,height, ChooseBlock(generated)));
-                System.out.println("generated in: " + i + " " + j);
             }
         }
     }
-    public void Paint()
+    public void UpdateGeneration(Camera camera)
     {
-        for(Block block : blocks)
+        int posx = (int) camera.position.x;
+        int posy = (int) camera.position.y;
+
+        Set<Block> blockSet = new HashSet<>();
+        if (posx == lastPosX && posy == lastPosY) {
+            return;
+        }
+
+        lastPosX = posx;
+        lastPosY = posy;
+        for (int i = posx-fov; i <=posx+fov ; i+=32) {
+            for (int j = posy-fov; j <=posy+fov ; j+=32) {
+                double generated = noise.noise(i*scale, j*scale)*2;
+                if(!blocks.contains(new Block(i,j, width,height, ChooseBlock(generated))))
+                {
+                    Block block = new Block(i,j, width,height, ChooseBlock(generated));
+                    blockSet.add(block);
+                }
+            }
+        }
+        blocks.removeIf(block -> !blockSet.contains(block));
+        blocks.addAll(blockSet);
+    }
+
+    public void Paint(Camera camera)
+    {
+
+        for (Block block : blocks)
         {
-            batch.draw(textures[block.blockType], block.getX(),block.getY(),block.getWidth(),block.getHeight());
+            if(block.getX()<=camera.position.x+1000 && block.getX()>= camera.position.x-1000)
+            {
+                if(block.getY()<=camera.position.y+1000 && block.getY()>= camera.position.y-1000)
+                {
+                    batch.draw(textures[block.getBlockType()], block.getX(),block.getY(),block.getWidth(),block.getHeight());
+                }
+            }
         }
     }
     private void Init()
