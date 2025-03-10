@@ -15,8 +15,8 @@ public class Generator {
     int fov=320;
     int lastPosX=0;
     int lastPosY=0;
-   public Set<Block> blocks =new HashSet<>();
-   PerlinNoise noise;
+    public Set<Block> blocks =new HashSet<>();
+    PerlinNoise noise;
     float scale = 0.075f;
     public Generator(SpriteBatch batch) {
         this.batch = batch;
@@ -67,9 +67,9 @@ public class Generator {
 
         for (Block block : blocks)
         {
-            if(block.getX()<=camera.position.x+1000 && block.getX()>= camera.position.x-1000)
+            if(block.getX()<=camera.position.x+fov&& block.getX()>= camera.position.x-fov)
             {
-                if(block.getY()<=camera.position.y+1000 && block.getY()>= camera.position.y-1000)
+                if(block.getY()<=camera.position.y+fov && block.getY()>= camera.position.y-fov)
                 {
                     batch.draw(textures[block.getBlockType()], block.getX(),block.getY(),block.getWidth(),block.getHeight());
                 }
