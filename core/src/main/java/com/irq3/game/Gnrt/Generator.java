@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class Generator {
@@ -40,6 +41,8 @@ public class Generator {
     {
         int posx = (int) camera.position.x;
         int posy = (int) camera.position.y;
+        int realPosX = 32*Math.round(posx/32f);
+        int realPosY = 32*Math.round(posy/32f);
 
         Set<Block> blockSet = new HashSet<>();
         if (posx == lastPosX && posy == lastPosY) {
@@ -48,18 +51,29 @@ public class Generator {
 
         lastPosX = posx;
         lastPosY = posy;
-        for (int i = posx-fov; i <=posx+fov ; i+=32) {
-            for (int j = posy-fov; j <=posy+fov ; j+=32) {
+        for (int i = realPosX-fov; i <=realPosX+fov ; i+=32) {
+            for (int j = realPosY-fov; j <=realPosY+fov ; j+=32) {
                 double generated = noise.noise(i*scale, j*scale)*2;
-                if(!blocks.contains(new Block(i,j, width,height, ChooseBlock(generated))))
+                Block block = new Block(i,j, width,height, ChooseBlock(generated));
+                if(!blocks.contains(block))
                 {
-                    Block block = new Block(i,j, width,height, ChooseBlock(generated));
                     blockSet.add(block);
                 }
             }
         }
-        blocks.removeIf(block -> !blockSet.contains(block));
         blocks.addAll(blockSet);
+        Iterator<Block> iterator = blocks.iterator();
+        while (iterator.hasNext())
+        {
+            Block block = iterator.next();
+            if(block.getX()>=posx+fov || block.getX()<=posx-fov|| block.getY()>=posy+fov || block.getY()<=posy-fov)
+            {
+                iterator.remove();
+            }
+        }
+
+
+        System.out.println("X: "+posx+" Y: "+posy);
     }
 
     public void Paint(Camera camera)

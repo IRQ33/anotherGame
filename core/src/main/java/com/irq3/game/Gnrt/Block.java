@@ -57,15 +57,15 @@ public class Block {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Block block = (Block) o;
-        return x == block.x && y == block.y && width == block.width && height == block.height && blockType == block.blockType;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Block block = (Block) obj;
+        return x == block.x && y == block.y;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, width, height, blockType);
+        return Objects.hash(x, y);
     }
 }

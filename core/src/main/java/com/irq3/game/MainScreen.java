@@ -37,8 +37,8 @@ public class MainScreen implements Screen {
         generator.UpdateGeneration(camera);
         generator.Paint(camera);
         player.Paint(batch);
-        font.draw(batch,"FPS: "+Gdx.graphics.getFramesPerSecond(), camera.position.x+180,camera.position.y+100);
-        font.draw(batch,"Loaded: "+generator.blocks.size(), camera.position.x+180,camera.position.y+60);
+        font.draw(batch,"FPS: "+Gdx.graphics.getFramesPerSecond(), camera.position.x+160,camera.position.y+100);
+        font.draw(batch,"Loaded: "+generator.blocks.size(), camera.position.x+160,camera.position.y+60);
         batch.end();
     }
 
