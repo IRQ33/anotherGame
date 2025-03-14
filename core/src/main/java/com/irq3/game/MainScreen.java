@@ -23,8 +23,8 @@ public class MainScreen implements Screen {
         camera = new OrthographicCamera(640,480);
         camera.zoom = 0.8f;
         playerObj = new PlayerObj();
-        generator= new Generator(batch);
         Mcamera= new MoveCamera(camera);
+        generator= new Generator(batch);
         generator.Generate(camera);
         camera.position.y = 0;
     }

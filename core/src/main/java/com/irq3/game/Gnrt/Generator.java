@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.irq3.game.Utlis;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,8 +42,8 @@ public class Generator {
     {
         int posX = (int) camera.position.x;
         int posY = (int) camera.position.y;
-        int realPosX = 32*Math.round(posX/32f);
-        int realPosY = 32*Math.round(posY/32f);
+        int realPosX = Utlis.realVal(posX);
+        int realPosY = Utlis.realVal(posY);
 
         Set<Block> blockSet = new HashSet<>();
         if (posX == lastPosX && posY == lastPosY) {

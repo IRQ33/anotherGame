@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.irq3.game.Gnrt.Block;
 
 public class PlayerObj {
     private Sprite sprite;
     private Texture texture;
+    private Block standingBlock;
     private int x = 0, y = 0, height = 32, width = 32;
 
     public PlayerObj() {
@@ -21,6 +23,11 @@ public class PlayerObj {
     public void Paint(SpriteBatch batch)
     {
         sprite.draw(batch);
+    }
+
+    public void Tick()
+    {
+
     }
 
     public int getX() {
