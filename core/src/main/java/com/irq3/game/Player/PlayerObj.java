@@ -7,17 +7,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.irq3.game.Gnrt.Block;
 
 public class PlayerObj {
-    private Sprite sprite;
-    private Texture texture;
+    private final Sprite sprite;
     private Block standingBlock;
+    private final Movement movement;
     private int x = 0, y = 0, height = 32, width = 32;
 
     public PlayerObj() {
-        texture = new Texture(Gdx.files.internal("robot.png"));
-        sprite = new Sprite(this.texture);
+        Texture texture = new Texture(Gdx.files.internal("robot.png"));
+        sprite = new Sprite(texture);
         sprite.setPosition(this.x,this.y);
         sprite.setSize(this.width,this.height);
         System.out.println("X: "+this.x+ " Y: "+this.y);
+        movement = new Movement(this);
     }
 
     public void Paint(SpriteBatch batch)
@@ -27,7 +28,7 @@ public class PlayerObj {
 
     public void Tick()
     {
-
+        movement.Move();
     }
 
     public int getX() {

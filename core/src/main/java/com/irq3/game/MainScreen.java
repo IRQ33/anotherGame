@@ -23,7 +23,7 @@ public class MainScreen implements Screen {
         camera = new OrthographicCamera(640,480);
         camera.zoom = 0.8f;
         playerObj = new PlayerObj();
-        Mcamera= new MoveCamera(camera);
+        Mcamera= new MoveCamera(playerObj, camera);
         generator= new Generator(batch);
         generator.Generate(camera);
         camera.position.y = 0;
@@ -39,6 +39,7 @@ public class MainScreen implements Screen {
         generator.UpdateGeneration(camera);
         generator.Paint(camera);
         playerObj.Paint(batch);
+        playerObj.Tick();
         font.draw(batch,"FPS: "+Gdx.graphics.getFramesPerSecond(), camera.position.x+160,camera.position.y+100);
         font.draw(batch,"Loaded: "+generator.getGenSize(), camera.position.x+160,camera.position.y+60);
 
