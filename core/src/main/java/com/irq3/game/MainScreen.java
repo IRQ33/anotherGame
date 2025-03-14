@@ -7,11 +7,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.irq3.game.Gnrt.Generator;
+import com.irq3.game.Player.PlayerObj;
 
 public class MainScreen implements Screen {
     SpriteBatch batch;
     OrthographicCamera camera;
-    Player player;
+    PlayerObj playerObj;
     Generator generator;
     MoveCamera Mcamera;
     BitmapFont font;
@@ -21,10 +22,11 @@ public class MainScreen implements Screen {
         font = new BitmapFont();
         camera = new OrthographicCamera(640,480);
         camera.zoom = 0.8f;
-        player = new Player();
+        playerObj = new PlayerObj();
         generator= new Generator(batch);
         Mcamera= new MoveCamera(camera);
         generator.Generate(camera);
+        camera.position.y = 0;
     }
 
     @Override
@@ -36,9 +38,10 @@ public class MainScreen implements Screen {
         batch.begin();
         generator.UpdateGeneration(camera);
         generator.Paint(camera);
-        player.Paint(batch);
+        playerObj.Paint(batch);
         font.draw(batch,"FPS: "+Gdx.graphics.getFramesPerSecond(), camera.position.x+160,camera.position.y+100);
-        font.draw(batch,"Loaded: "+generator.blocks.size(), camera.position.x+160,camera.position.y+60);
+        font.draw(batch,"Loaded: "+generator.getGenSize(), camera.position.x+160,camera.position.y+60);
+
         batch.end();
     }
 
@@ -64,6 +67,8 @@ public class MainScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        batch.dispose();
+        font.dispose();
+        generator.Dispose();
     }
 }

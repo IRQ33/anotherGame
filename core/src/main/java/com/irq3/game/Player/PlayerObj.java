@@ -1,16 +1,16 @@
-package com.irq3.game;
+package com.irq3.game.Player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Player {
+public class PlayerObj {
     private Sprite sprite;
     private Texture texture;
     private int x = 0, y = 0, height = 32, width = 32;
 
-    public Player() {
+    public PlayerObj() {
         texture = new Texture(Gdx.files.internal("robot.png"));
         sprite = new Sprite(this.texture);
         sprite.setPosition(this.x,this.y);
