@@ -16,29 +16,29 @@ public class Generator {
     int fov=320;
     int lastPosX=0;
     int lastPosY=0;
-    private Set<Block> blocks =new HashSet<>();
+    public static final Set<Block> WORLD =new HashSet<>();
     PerlinNoise noise;
     float scale = 0.025f;
     public Generator(SpriteBatch batch) {
         this.batch = batch;
-        Init();
+        init();
 
 
     }
 
-    public void Generate(Camera camera)
+    public void generate(Camera camera)
     {
-        int posx =(int) camera.position.x;
-        int posy = (int) camera.position.y;
+        int posX =(int) camera.position.x;
+        int posY = (int) camera.position.y;
 
-        for (int i = posx-fov; i <=posx+fov ; i+=32) {
-            for (int j = posy-fov; j <=posy+fov ; j+=32) {
+        for (int i = posX-fov; i <=posX+fov ; i+=32) {
+            for (int j = posY-fov; j <=posY+fov ; j+=32) {
                 double generated = noise.noise(i*scale, j*scale)*2;
-                blocks.add(new Block(i,j, width,height, ChooseBlock(generated)));
+                WORLD.add(new Block(i,j, width,height, chooseBlock(generated)));
             }
         }
     }
-    public void UpdateGeneration(Camera camera)
+    public void updateGeneration(Camera camera)
     {
         int posX = (int) camera.position.x;
         int posY = (int) camera.position.y;
@@ -55,15 +55,15 @@ public class Generator {
         for (int i = realPosX-fov; i <=realPosX+fov ; i+=32) {
             for (int j = realPosY-fov; j <=realPosY+fov ; j+=32) {
                 double generated = noise.noise(i*scale, j*scale)*2;
-                Block block = new Block(i,j, width,height, ChooseBlock(generated));
-                if(!blocks.contains(block))
+                Block block = new Block(i,j, width,height, chooseBlock(generated));
+                if(!WORLD.contains(block))
                 {
                     blockSet.add(block);
                 }
             }
         }
-        blocks.addAll(blockSet);
-        blocks.removeIf(block -> block.getX() >= posX + fov || block.getX() <= posX - fov ||
+        WORLD.addAll(blockSet);
+        WORLD.removeIf(block -> block.getX() >= posX + fov || block.getX() <= posX - fov ||
             block.getY() >= posY + fov || block.getY() <= posY - fov);
 
 
@@ -71,21 +71,21 @@ public class Generator {
         System.out.println((Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/1024/1024+" MB");
     }
 
-    public void Paint(Camera camera)
+    public void paint(Camera camera)
     {
 
-        for (Block block : blocks)
+        for (Block block : WORLD)
         {
             if(block.getX()<=camera.position.x+fov&& block.getX()>= camera.position.x-fov)
             {
                 if(block.getY()<=camera.position.y+fov && block.getY()>= camera.position.y-fov)
                 {
-                    batch.draw(textures[block.getBlockType()], block.getX(),block.getY(),block.getWidth(),block.getHeight());
+                    batch.draw(textures[block.getNBlockType()], block.getX(),block.getY(),block.getWidth(),block.getHeight());
                 }
             }
         }
     }
-    private void Init()
+    private void init()
     {
         textures[0] = new Texture(Gdx.files.internal("stone.png"));
         textures[1] = new Texture(Gdx.files.internal("sand.png"));
@@ -95,21 +95,21 @@ public class Generator {
 
         noise = new PerlinNoise(21337);
     }
-    public int ChooseBlock(double generated)
+    public BlockType chooseBlock(double generated)
     {
         if (generated < -0.6f) {
-            return 0;  //kamien
+            return BlockType.STONE;  //kamien
         } else if (generated < -0.2f) {
-            return 3; // dircik
+            return BlockType.DIRT; // dircik
         } else if (generated < 0.2f) {
-            return 2; // łota
+            return BlockType.WATER; // łota
         } else if (generated < 0.4f) {
-            return 1; // piasek
+            return BlockType.SAND; // piasek
         } else {
-            return 4; // trawka
+            return BlockType.GRASS; // trawka
         }
     }
-    public void Dispose()
+    public void dispose()
     {
         for (int i=0; i<=textures.length; i++)
         {
@@ -118,6 +118,6 @@ public class Generator {
     }
     public int getGenSize()
     {
-        return blocks.size();
+        return WORLD.size();
     }
 }

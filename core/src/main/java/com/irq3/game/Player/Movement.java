@@ -12,7 +12,7 @@ public class Movement implements InputProcessor {
 
     private final Set<Integer> keys = new HashSet<>();
     private final PlayerObj playerObj;
-    private boolean canMove=true;
+    private final boolean canMove=true;
 
     public Movement(PlayerObj obj)
     {
@@ -31,7 +31,7 @@ public class Movement implements InputProcessor {
         keys.remove(i);
         return false;
     }
-    public void Move()
+    public void move()
     {
         if (!canMove) return;
         if(!keys.isEmpty())

@@ -8,12 +8,12 @@ public class Block {
     private int blockType;
 
 
-    public Block(int x, int y, int width, int height, int blockType) {
+    public Block(int x, int y, int width, int height, BlockType type) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.blockType = blockType;
+        this.blockType = type.getNumVal();
     }
 
     public int getX() {
@@ -48,8 +48,17 @@ public class Block {
         this.height = height;
     }
 
-    public int getBlockType() {
-        return blockType;
+    public int getNBlockType() {
+       return blockType;
+    }
+
+    public BlockType getBlockType() {
+        for (BlockType type : BlockType.values())
+        {
+            if(type.getNumVal()==blockType) return type;
+        }
+        return null;
+
     }
 
     public void setBlockType(int blockType) {

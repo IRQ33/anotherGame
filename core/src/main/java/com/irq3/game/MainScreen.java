@@ -25,21 +25,21 @@ public class MainScreen implements Screen {
         playerObj = new PlayerObj();
         Mcamera= new MoveCamera(playerObj, camera);
         generator= new Generator(batch);
-        generator.Generate(camera);
+        generator.generate(camera);
         camera.position.y = 0;
     }
 
     @Override
     public void render(float v) {
         ScreenUtils.clear(0,0,179,1);
-        Mcamera.Move();
+        Mcamera.move();
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        generator.UpdateGeneration(camera);
-        generator.Paint(camera);
-        playerObj.Paint(batch);
-        playerObj.Tick();
+        generator.updateGeneration(camera);
+        generator.paint(camera);
+        playerObj.paint(batch);
+        playerObj.tick();
         font.draw(batch,"FPS: "+Gdx.graphics.getFramesPerSecond(), camera.position.x+160,camera.position.y+100);
         font.draw(batch,"Loaded: "+generator.getGenSize(), camera.position.x+160,camera.position.y+60);
 
@@ -70,6 +70,6 @@ public class MainScreen implements Screen {
     public void dispose() {
         batch.dispose();
         font.dispose();
-        generator.Dispose();
+        generator.dispose();
     }
 }
